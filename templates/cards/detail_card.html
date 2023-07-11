@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block nav %}
+    {% if request.user.is_authenticated %}
+
+
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'card_comment_add' card.pk %}">Add Comment</a>
+    </li>
+        <li class="nav-item">
+         <a class="nav-link" href="{% url 'checklist_create' card.pk %}">Create Checklist</a>
+    </li>
+
+    {% endif %}
+{% endblock %}
+{% block content %}
+
+        <h3 class="ms-3">Comments:</h3>
+    <div class="row">
+        {% for comment in comments %}
+
+            <div class="col-sm-4">
+                <div class="card text-bg-light mb-3">
+                    <div class="card-body">
+                        <p class="card-text">{{ comment.text }}</p>
+
+                        <div class="d-flex justify-content-around">
+                            {% if comment.author == request.user %}
+                                <a href="{% url 'comment_update' comment.pk %}"
+                                   class="btn btn-success px-5">Update</a>
+                            {% endif %}
+                            {% if comment.author == request.user %}
+                                <a href="{% url 'comment_delete' comment.pk %}"
+                                   class="btn btn-danger px-5">Delete</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <p>Комментариев нет</p>
+        {% endfor %}
+    </div>
+{% include 'checklist/checklist_list.html' %}
+
+{% endblock %}

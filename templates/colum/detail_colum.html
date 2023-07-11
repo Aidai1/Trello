@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block nav %}
+    {% if request.user.is_authenticated %}
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'create_card' columns.pk %}">Create card for this column</a>
+        </li>
+{#        <li class="nav-item">#}
+{#            <a class="nav-link" href="{% url 'card_label_create' card.pk %}">Create card for this column</a>#}
+{##}
+{##}
+{#        </li>#}
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+{% for card in columns.cards.all %}
+    <div class="row  row-cols-1 my-3 row-cols-md-3 g-4">
+        <div class="col">
+            <div class="card bg-dark">
+                <div class="card-body">
+                    <h5 class="card-title text-success">{{ card.title }}</h5>
+
+                    {% if card.label %}
+                        <p class="card-text">
+                            <span class="badge bg-{{ card.label.color.code }}">{{ card.label.name }}</span>
+                        </p>
+                    {% endif %}
+                    <form method="POST" action="{% url 'card_label_create' card.pk %}">
+                        {% csrf_token %}
+                        <select name="label" class="form-select" aria-label="Select Label">
+                            <option selected disabled>Select Label</option>
+                            {% for label in labels %}
+                                <option value="{{ label.id }}">{{ label.name }}</option>
+                            {% endfor %}
+                        </select>
+                        <button type="submit" class="btn btn-primary">Add Label</button>
+                    </form>
+
+
+
+
+                    <p class="card-text">
+                        <a href="{% url 'detail_card' card.pk %}" class="btn btn-warning">Detailed</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endfor %}
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block nav %}
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'trelloapp:detail_colomn' colomns.pk %}">View</a>
+    </li>
+{% endblock %}
+{% block content %}
+    <h1 class="text-center m-5">Are you sure want to delete this colomn "{{ colomns.title }}"?</h1>
+    <form method="POST" action="{% url "webapp:project_delete" project.pk %}" class="text-center">
+        {% csrf_token %}
+                  {% include 'partial/form.html' with button_text="Delete" %}
+        <p class="btn btn-success "><a class="text-white" href="{% url "trello:detail_board" board.pk %}">Cancel</a></p>
+    </form>
+{% endblock %}

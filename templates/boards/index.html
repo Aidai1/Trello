@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% csrf_token %}
+{% block nav %}
+    {% if request.user.is_authenticated %}
+    <li class="nav-item">
+          <a class="nav-link" href="{% url 'create_board' %}">Add Board</a>
+    </li>
+   {% endif %}
+{% endblock %}
+
+
+{% block content %}
+        {% include 'partial/simple_search.html' %}
+
+  {% for board in boards %}
+    <div class="card text-bg-dark my-5">
+      {% if board.background %}
+        <img src="{{ board.background.url }}" class="card-img" alt="...">
+      {% endif %}
+      <div class="card-img-overlay">
+              <p class="card-text">Автор: {{ board.author.username }}</p>
+
+        <h5 class="card-title">{{ board.title }}</h5>
+        <a href="{{ board.get_absolute_url }}" class="btn btn-warning">Detailed</a>
+        {% if request.user == board.author %}
+          <a href="{% url 'update_board' board.pk %}" class="btn btn-success">Update</a>
+          <a href="{% url 'delete_board' board.pk %}" class="btn btn-danger">Delete</a>
+        {% endif %}
+        <h4>Участники :</h4>
+        <ul>
+          {% for participant in board.users.all %}
+            <li> {{ participant.username }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  {% endfor %}
+{% endblock %}
