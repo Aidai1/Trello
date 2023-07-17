@@ -1,14 +1,18 @@
-from django.shortcuts import render
+
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView, DetailView
 from .models import Board, Card, Checklist, ChecklistItem, Color, Column, Comment, Label
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-from django.http import HttpResponseForbidden
 from django.shortcuts import redirect
 from .forms import BoardForm, CardForm, ChecklistForm, ColumnForm, CommentForm, CardLabelForm
+from django.views.generic import DetailView
+from django.shortcuts import  redirect
 
 
 
+
+
+    
 
 
 class BoardDetailView(LoginRequiredMixin, DetailView):
@@ -157,7 +161,7 @@ class CardLabelCreateView(CreateView):
      
                
     
-    
+   
     
                 
               

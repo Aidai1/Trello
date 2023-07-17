@@ -1,6 +1,6 @@
 from django import forms 
 from .models import Board, Card, Color, Comment, Column, Label, ChecklistItem, Checklist
-from django.forms import widjets
+
 
 class BoardForm(forms.ModelForm):
     class Meta:
@@ -42,7 +42,7 @@ class CardLabelForm(forms.ModelForm):
         model = Label
         fields = ['name', 'color']
         
-class SimplSearchForm(forms.ModelForm):
-    search = forms.CharField(max_length=100, required=False, label='Find',
-                             widget=widjets.TextInput(attrs={'class': "form-control w-2500"}))                                       
+# class SimplSearchForm(forms.ModelForm):
+#     search = forms.CharField(max_length=100, required=False, label='Find',
+#                              widget=widjets.TextInput(attrs={'class': "form-control w-2500"}))                                       
                         
