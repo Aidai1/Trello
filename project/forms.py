@@ -1,14 +1,40 @@
 from django import forms 
-from .models import Board, Card, Color, Comment, Column, Label, ChecklistItem, Checklist
+from .models import User, Board, Card, Color, Comment, Column, Label, ChecklistItem, Checklist
+from django.contrib.auth.forms import UserCreationForm
+
+class UserForm(forms.Form):
+    email = forms.EmailField(max_length=200, help_text='Requiered')
+    
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'password1', 'password2')
+
+            
+
+class RegistrationForm(forms.Form):
+    email = forms.EmailField(label="Email")
+    password = forms.CharField(label='Password')
+    last_name = forms.CharField(label='Last name')
+    
+    def email(self):
+        email = self.cleaned_data['email']
+        return email
+    
+    def password(self):
+        password = self.changed_data['password']
+        
+    def last_name(self):
+        last_name = self.cleaned_data['last_name']
+        return last_name
+    
+        
 
 
 class BoardForm(forms.ModelForm):
     class Meta:
         model = Board
         fields = ['title', 'background', 'users']
-        widgets = {
-            'users : widgets.CheckboxSelectMultiple',
-        }
+        
         
 class CardForm(forms.ModelForm):
     class Meta:
@@ -41,8 +67,5 @@ class CardLabelForm(forms.ModelForm):
     class Meta:
         model = Label
         fields = ['name', 'color']
-        
-# class SimplSearchForm(forms.ModelForm):
-#     search = forms.CharField(max_length=100, required=False, label='Find',
-#                              widget=widjets.TextInput(attrs={'class': "form-control w-2500"}))                                       
+                                    
                         

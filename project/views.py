@@ -1,20 +1,59 @@
 
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView, DetailView
-from .models import Board, Card, Checklist, ChecklistItem, Color, Column, Comment, Label
+from .models import User, Board, Card, Checklist, ChecklistItem, Color, Column, Comment, Label,User
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-from django.shortcuts import redirect
-from .forms import BoardForm, CardForm, ChecklistForm, ColumnForm, CommentForm, CardLabelForm
-from django.views.generic import DetailView
-from django.shortcuts import  redirect
+from django.shortcuts import redirect, render
+from .forms import UserForm, RegistrationForm, BoardForm, CardForm, ChecklistForm, ColumnForm, CommentForm, CardLabelForm
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.views import LoginView
+from django.http import HttpResponseRedirect, HttpResponse
+from django.contrib.auth import get_user_model
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes, force_str
+from .tokens import account_activation_token
 
-
-
-
-
+class UserDetailView(DetailView, ListView):
+    model = User
+    template_name = 'user_detail.html'
+    context_object_name = 'user_obj'
     
+    def post(self, request, *args, **kwargs):
+        board = self.get_object()
+        request.user.add_to_favorites(board)
+        return HttpResponseRedirect(self.request.path)
+
+    def get_object(self, queryset=None):
+        return self.request.user
+
+    def test_func(self):
+        user = self.get_object()
+        return user == self.request.user
 
 
+
+def activate(request, uidb64, token):
+    User = get_user_model()
+    try:
+        uid = force_str(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
+    except(TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+    if user is not None and account_activation_token.check_token(user, token):
+        user.is_active = True
+        user.save()
+        return HttpResponse('Thank you for your email confirmation. Now you can login your account.')
+    else:
+        return HttpResponse('Activation link is invalid!')
+            
+
+
+class LoginView(DetailView, LoginView):
+    form_class = AuthenticationForm
+    template_name = 'login.html'
+    
+   
+    
 class BoardDetailView(LoginRequiredMixin, DetailView):
     model = Board
     template_name = 'colum/list_colum.html'
@@ -39,8 +78,8 @@ class BoardUpdateView(PermissionRequiredMixin, UpdateView):
 
 class BoardCreateView(LoginRequiredMixin, CreateView):
     model = Board
-    context_object_name = 'boards'
-    template_name = 'boards/create_board.html'
+    context_object_name = 'board'
+    template_name = 'board/create_board.html'
     form_class = BoardForm
     success_url = reverse_lazy('index')
 
@@ -83,7 +122,7 @@ class CardDeleteView(DeleteView):
     template_name = "cards/delete_card.html"
     success_url = reverse_lazy('index')
     
-class CheclistCreateView(CreateView):
+class ChecklistCreateView(CreateView):
     model = Checklist
     template_name = "checlist/checlist_create.html"
     form_class = ChecklistForm
@@ -106,16 +145,16 @@ class ChecklistItemListView(ListView):
 
 class ColumnListView(PermissionRequiredMixin, ListView):
     model = Column
-    template_name = "colum/list_colum.html"
+    template_name = "column/list_colum.html"
     context_object_name = "colum"
     
-class ColumCreateView(LoginRequiredMixin, CreateView):
+class ColumnCreateView(LoginRequiredMixin, CreateView):
     model = Column
-    template_name = "colum/create_colum.html"
+    template_name = "column/create_colum.html"
     context_object_name = "columns"
     form_class = ColumnForm
     
-class ColumUpdateview(PermissionRequiredMixin, UpdateView):
+class ColumnUpdateView(PermissionRequiredMixin, UpdateView):
     model = Column
     context_object_name = "columns"
     
@@ -159,9 +198,5 @@ class CardLabelCreateView(CreateView):
     form_class = CardLabelForm   
     template_name = "label/label_create.html"
      
-               
-    
+     
    
-    
-                
-              

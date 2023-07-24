@@ -1,9 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 
-
-
-from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 
@@ -22,8 +19,9 @@ class User(models.Model):
 
     
 class Board(models.Model):
-    author = models.ForeignKey(get_user_model(),on_delete=models.CASCADE, verbose_name="Автор" )
-    users = models.ManyToManyField(get_user_model(), verbose_name="Участники")
+    author = models.ForeignKey(get_user_model(),on_delete=models.CASCADE, verbose_name="Автор"
+                               , related_name="author_project")
+    users = models.ManyToManyField(get_user_model(), verbose_name="Участники", related_name='boards_users')
     title = models.CharField(max_length=100, null=False, blank=False, verbose_name="Название")
     background = models.ImageField(upload_to='board_backgrounds/', null=True, blank=True, verbose_name="Фон")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата создание")
@@ -52,7 +50,7 @@ class Label(models.Model):
     
     
 class Column(models.Model):
-    board = models.ForeignKey(Board, on_delete=models.CASCADE, related_name='columnss')
+    board = models.ForeignKey(Board, on_delete=models.CASCADE, related_name='columns')
     title = models.CharField(max_length=30, null=False, blank=False)
     order = models.PositiveIntegerField(default=0)
 
@@ -61,7 +59,7 @@ class Column(models.Model):
         return self.title   
     
 class Card(models.Model):
-    column = models.ForeignKey(Column, on_delete=models.CASCADE)
+    column = models.ForeignKey(Column, on_delete=models.CASCADE, related_name='cards')
     title = models.CharField(max_length=100, null=False, blank=False)
     description = models.TextField(max_length=500, null=True, blank=True)
     order = models.PositiveIntegerField(default=0)
@@ -97,8 +95,4 @@ class Comment(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     def __str__(self):
         return self.text    
-         
 
-    
-
-                
