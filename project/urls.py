@@ -1,5 +1,7 @@
 from django.urls import path
-from .views import (
+from project import views
+
+from  .views import (
    activate,
    LoginView,
    UserDetailView,
@@ -33,10 +35,10 @@ urlpatterns = [
    path('activate/<str:uidb64>/<str:token>/', activate, name='activate'),
    path('<int:pk>/', UserDetailView.as_view(), name='detail_account'),
    path('login/', LoginView.as_view(template_name='login.html'), name='login'),
-   path('board/create/', BoardCreateView.as_view(), name='create_board'),
-   path('board/<int:pk>/update/', BoardUpdateView.as_view(), name='update_board'),
-   path('board/<int:pk>/delete/', BoardDeletView.as_view(), name='delete_board'),
-   path('board/<int:pk>/column/', BoardDetailView.as_view(), name='list_column'),
+   path('boards/create/', BoardCreateView.as_view(), name='create_board'),
+   path('boards/<int:pk>/update/', BoardUpdateView.as_view(), name='update_board'),
+   path('boards/<int:pk>/delete/', BoardDeletView.as_view(), name='delete_board'),
+   path('boards/<int:pk>/column/', BoardDetailView.as_view(), name='list_column'),
    path('column/<int:pk>/create/', ColumnCreateView.as_view(), name='create_column'),
    path('column/delete/<int:pk>/', ColumnDeleteView.as_view(), name='delete_column'),
    path('column/update/<int:pk>/', ColumnUpdateView.as_view(), name='update_column'),

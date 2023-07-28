@@ -12,10 +12,17 @@ from django.contrib.auth import get_user_model
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
 from .tokens import account_activation_token
+from django.shortcuts import render
+
+def my_view(request):
+    return render(request, 'project/template.html')  # Ensure 'my_template.html' exists
+
+def index(request):
+    return render(request, 'project/index.html')
 
 class UserDetailView(DetailView, ListView):
     model = User
-    template_name = 'user_detail.html'
+    template_name = 'user/user_detail.html'
     context_object_name = 'user_obj'
     
     def post(self, request, *args, **kwargs):
@@ -50,7 +57,7 @@ def activate(request, uidb64, token):
 
 class LoginView(DetailView, LoginView):
     form_class = AuthenticationForm
-    template_name = 'login.html'
+    template_name = 'templates/user/login.html'
     
    
     
@@ -68,9 +75,9 @@ class BoardUpdateView(PermissionRequiredMixin, UpdateView):
     model = Board
     form_class = BoardForm  
     temlate_name = 'boards/update_board.html'
-    context_object_name = 'boards'
+    context_object_name = 'board'
     success_url = reverse_lazy('index')
-    permission_required = 'trelloapp.update_view'
+    permission_required = 'app.update_view'
     
     def has_permission(self) -> bool:
         return super().has_permission() or self.get_object().author == self.request.user   
@@ -79,7 +86,7 @@ class BoardUpdateView(PermissionRequiredMixin, UpdateView):
 class BoardCreateView(LoginRequiredMixin, CreateView):
     model = Board
     context_object_name = 'board'
-    template_name = 'board/create_board.html'
+    template_name = 'templates/boards/create_board.html'
     form_class = BoardForm
     success_url = reverse_lazy('index')
 
@@ -87,15 +94,15 @@ class BoardCreateView(LoginRequiredMixin, CreateView):
         board = form.save(commit=False)
         board.author = self.request.user
         board.save()
-        board.users.set(form.cleaned_data['users'])
+        board.users.set(form.cleaned_data['user'])
         return super().form_valid(form)
     
 class BoardDeletView(PermissionRequiredMixin, DeleteView):
     model = Board
-    template_name = 'boards/delete_board.html'
-    context_object_name = 'boards'
+    template_name = 'boards/delete.html'
+    context_object_name = 'board'
     success_url = reverse_lazy('index')
-    permission_required = 'trelloapp.delete_board'
+    permission_required = 'app.delete_board'
     
     def has_permission(self) -> bool:
         return super().has_permission() or self.get_object().author == self.request.user    
@@ -103,7 +110,7 @@ class BoardDeletView(PermissionRequiredMixin, DeleteView):
     
 class CardCreateView(LoginRequiredMixin, CreateView):
     model = Card
-    template_name = "cards/create_card.html"
+    template_name = "cards/create.html"
     context_object_name = "card"
     form_class = CardForm
     
@@ -124,17 +131,18 @@ class CardDeleteView(DeleteView):
     
 class ChecklistCreateView(CreateView):
     model = Checklist
-    template_name = "checlist/checlist_create.html"
+    template_name = "checlist/create_checlist.html"
     form_class = ChecklistForm
     
 class ChecklistUpdateView(PermissionRequiredMixin, UpdateView):
     model = Checklist
-    template_name = "checklist/checklist_update.html"
+    template_name = "checklist/update_cheklist.html"
     form_class = ChecklistForm
-    context_object_name = "checklists"
+    context_object_name = "checklist"
     
 class ChecklistDeletView(DeleteView):
     model = Checklist
+    template_name = 'templates/cheklist/cheklist.html'
     
     
 class ChecklistItemListView(ListView):
@@ -145,13 +153,13 @@ class ChecklistItemListView(ListView):
 
 class ColumnListView(PermissionRequiredMixin, ListView):
     model = Column
-    template_name = "column/list_colum.html"
-    context_object_name = "colum"
+    template_name = "column/list_column.html"
+    context_object_name = "column"
     
 class ColumnCreateView(LoginRequiredMixin, CreateView):
     model = Column
-    template_name = "column/create_colum.html"
-    context_object_name = "columns"
+    template_name = "column/create_column.html"
+    context_object_name = "column"
     form_class = ColumnForm
     
 class ColumnUpdateView(PermissionRequiredMixin, UpdateView):
@@ -162,7 +170,7 @@ class ColumnUpdateView(PermissionRequiredMixin, UpdateView):
 class ColumnDeleteView(PermissionRequiredMixin, DeleteView):
     model = Column
     temlate_name = "column/delete_column.html"
-    success_url = reverse_lazy('detail_colum')
+    success_url = reverse_lazy('detail_column')
     context_object_name = "columns"
     
     
