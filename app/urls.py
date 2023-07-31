@@ -22,6 +22,6 @@ from project import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index),
-    path('project/', include('project.urls', namespace='project')),
+    path('project/', include('project.urls')),
 
 ] 
