@@ -6,7 +6,7 @@ def index(request):
     return render(request, 'base.html')
 
 def user_detail(request):
-    return render (request, 'user/user_detail')
+    return render (request, 'user/user_detail.html')
    
   
 def active_email(request):
