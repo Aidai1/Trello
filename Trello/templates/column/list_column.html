@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block nav %}
+    {% if request.user.is_authenticated %}
+    <li class="nav-item">
+          <a class="nav-link" href="{% url 'create_column' board.pk %}">Create column for this board</a>
+    </li>
+    {% endif %}
+{% endblock %}
+{% block content %}
+  <h2>Детальный просмотр доски "{{ board.title }}"</h2>
+{% for column in board.columnss.all %}
+    <div class="row row-cols-1 my-3 row-cols-md-3 g-4">
+      <div class="col">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title text-success">{{ column.title }}</h5>
+            <p class="card-text"> <a href="{% url 'detail_column_cards' column.pk %}  ">Увидеть карточки этой колонки</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+{% endfor %}
+
+
+      {% if request.user in board.favorite_boards.all %}
+        <button type="button" class="btn btn-primary" disabled>В избранном</button>
+      {% else %}
+        <form action="{% url 'add_to_favorites' %}" method="post" id="addToFavoritesForm">
+            {% csrf_token %}
+            <input type="hidden" name="board_id" value="{{ board.id }}">
+            <button type="submit" class="btn btn-outline-dark">Добавить в избранное эту доску</button>
+        </form>
+
+      {% endif %}
+
+{% if user.is_authenticated and board.author == user %}
+    <form method="POST" action="{% url 'board_join' pk=board.pk %}">
+        {% csrf_token %}
+        <input type="hidden" name="board_id" value="{{ board.id }}">
+        <label for="user_select">Выберите участника:</label>
+        <select name="user_select" id="user_select">
+            {% for user_item in board.users.all %}
+                <option value="{{ user_item.id }}">{{ user_item.username }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit" class="btn btn-primary">Добавить участника</button>
+    </form>
+{% endif %}
+
+
+{% endblock %}

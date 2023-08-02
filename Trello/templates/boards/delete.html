@@ -1,0 +1,11 @@
+% extends "base.html" %}
+{% block nav %}
+{% endblock %}
+{% block content %}
+    <h1 class="text-center m-5">Are you sure want to delete this board "{{ boards.title }}"?</h1>
+    <form method="POST" action="{% url "delete_board" boards.pk %}" class="text-center">
+        {% csrf_token %}
+        <p class="btn btn ">   {% include 'partial/form.html' with button_text="Delete" %}</p>
+        <p class="btn btn-success "><a class="text-white" href="{% url "index"  %}">Cancel</a></p>
+    </form>
+{% endblock %}

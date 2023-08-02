@@ -1,0 +1,8 @@
+<h1>Отмеченные доски</h1>
+<ul>
+  {% for board in favorite_boards %}
+    <li>{{ board.name }}</li>
+  {% empty %}
+    <li>Нет избранных досок</li>
+  {% endfor %}
+</ul>

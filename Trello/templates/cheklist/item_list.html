@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+    {% block nav %}
+    {% if request.user.is_authenticated %}
+
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'checklist_item_create' checklist.pk %}">Add item</a>
+        </li>
+
+
+    {% endif %}
+    {% endblock %}
+{% block content %}
+
+
+
+    {% for item in items %}
+        <div class="form-check form-switch">
+          <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
+          <label class="form-check-label" for="flexSwitchCheckDefault">{{ item.text }}</label>
+            {% if item.checklist.author == request.user %}
+            <a href="{% url 'checklist_item_delete' item.pk %}"
+               class="btn btn-danger px-5">Delete</a>
+        {% endif %}
+        </div>
+    {% endfor %}
+    {% endblock %}
