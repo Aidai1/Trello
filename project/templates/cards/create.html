@@ -1,9 +1,34 @@
-{% extends 'base.html' %}
-{% block content %}
-    <h1>Create new card for this column!</h1>
+<!-- boards/templates/cards/create_card.html -->
 
-    <form action="" method="post">
-        {% include 'partial/form.html' with button_text="create" %}
-
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Создать карточку</title>
+</head>
+<body>
+    <h1>Создать карточку</h1>
+    {% if error_message %}
+        <p>{{ error_message }}</p>
+    {% endif %}
+    <form method="post">
+        {% csrf_token %}
+        <label for="name">Название карточки:</label>
+        <input type="text" name="name" required>
+        <br>
+        <label for="description">Описание:</label>
+        <textarea name="description" rows="4" cols="50" maxlength="500"></textarea>
+        <br>
+        <label for="due_date">Дата окончания:</label>
+        <input type="date" name="due_date">
+        <br>
+        <label for="labels">Метки:</label>
+        <select name="labels" multiple>
+            {% for label in labels %}
+                <option value="{{ label.id }}">{{ label.name }}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <input type="submit" value="Создать карточку">
     </form>
-{% endblock %}
+</body>
+</html>

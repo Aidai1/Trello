@@ -1,44 +1,89 @@
+from django.contrib.auth.models import User
 from django.db import models
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.contrib.auth import get_user_model
 
-from django.db import models
 
+class CustomUserManager(BaseUserManager):
+    def create_user(self, email, password=None, **extra_fields):
+        if not email:
+            raise ValueError('The Email field must be set')
+        email = self.normalize_email(email)
+        user = self.model(email=email, **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
 
-class User(models.Model):
+    def create_superuser(self, email, password=None, **extra_fields):
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+
+        if extra_fields.get('is_staff') is not True:
+            raise ValueError('Superuser must have is_staff=True.')
+        if extra_fields.get('is_superuser') is not True:
+            raise ValueError('Superuser must have is_superuser=True.')
+
+        return self.create_user(email, password, **extra_fields)
+
+class CustomUser(AbstractBaseUser):
     email = models.EmailField(unique=True)
-    full_name = models.CharField(max_length=100)
-    is_active = models.BooleanField(default=False)
-    activation_token = models.CharField(max_length=100, blank=True)
+    full_name = models.CharField(max_length=255)
+    is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
    
+    objects = CustomUserManager()
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username']
+    REQUIRED_FIELDS = ['full_name']
 
     def __str__(self):
         return self.email
 
-    
+
 class Board(models.Model):
-    author = models.ForeignKey(get_user_model(),on_delete=models.CASCADE, verbose_name="Автор"
-                               , related_name="author_project")
-    users = models.ManyToManyField(get_user_model(), verbose_name="Участники", related_name='boards_users')
-    title = models.CharField(max_length=100, null=False, blank=False, verbose_name="Название")
-    background = models.ImageField(upload_to='board_backgrounds/', null=True, blank=True, verbose_name="Фон")
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата создание")
-    updated_at = models.DateTimeField(auto_now=True, verbose_name="Дата обновления")
-    arhiv = models.BooleanField(default=False, verbose_name="В архиве")
-    
-    def __str__(self) -> str:
+    title = models.CharField(max_length=100)
+    background = models.ImageField(upload_to='board_backgrounds/')
+    participants = models.ManyToManyField(CustomUser, related_name='boards')
+    is_archived = models.BooleanField(default=False)
+
+    def __str__(self):
         return self.title
-    
-    
-    
+
+class Column(models.Model):
+    name = models.CharField(max_length=100)
+    board = models.ForeignKey(Board, on_delete=models.CASCADE, related_name='columns')
+    order = models.PositiveIntegerField(default=0)
+ 
+    def __str__(self):
+        return self.name
+ 
+class Card(models.Model):
+    name = models.CharField(max_length=100)
+    description = models.TextField(max_length=500, blank=True)
+    column = models.ForeignKey(Column, on_delete=models.CASCADE, related_name='cards')
+    due_date = models.DateField(null=True, blank=True)
+    labels = models.ManyToManyField('Label', blank=True)
+    order = models.PositiveIntegerField(default=0)
+
+    def __str__(self):
+        return self.name
+
+class Comment(models.Model):
+    text = models.TextField(max_length=300)
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comments')
+    card = models.ForeignKey(Card, on_delete=models.CASCADE, related_name='comments')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
+
 class Color(models.Model):
     name = models.CharField(max_length=30)
-    code = models.CharField(max_length=8)  
-    
-    def __str__(self) -> str:
+    code = models.CharField(max_length=7)
+
+    def __str__(self):
         return self.name
+    
     
 
 class Label(models.Model):
@@ -46,53 +91,28 @@ class Label(models.Model):
     color = models.ForeignKey(Color, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.name    
-    
-    
-class Column(models.Model):
-    board = models.ForeignKey(Board, on_delete=models.CASCADE, related_name='columns')
-    title = models.CharField(max_length=30, null=False, blank=False)
-    order = models.PositiveIntegerField(default=0)
-
-
-    def __str__(self):
-        return self.title   
-    
-class Card(models.Model):
-    column = models.ForeignKey(Column, on_delete=models.CASCADE, related_name='cards')
-    title = models.CharField(max_length=100, null=False, blank=False)
-    description = models.TextField(max_length=500, null=True, blank=True)
-    order = models.PositiveIntegerField(default=0)
-    due_date = models.DateField(null=True, blank=True) 
-    labels = models.ManyToManyField(Label, related_name='cards_label', blank=True)
-    
-    
-    def __str__(self) -> str:
-        return self.title
+        return self.name
     
 class Checklist(models.Model):
-    card = models.ForeignKey(Card, on_delete=models.CASCADE)
-    title = models.CharField(max_length=100) 
-    author = models.ForeignKey(User, on_delete=models.CASCADE, default=1,verbose_name='Автор чеклиста')   
-    
+    card = models.ForeignKey(Card, on_delete=models.CASCADE, related_name='checklists')
+    title = models.CharField(max_length=100)
+    author = models.ForeignKey(get_user_model(), on_delete=models.SET_DEFAULT, default=1,
+                               related_name='checklist_author',
+                               verbose_name="Автор чеклиста")
+
     def __str__(self):
         return self.title
 
 
 class ChecklistItem(models.Model):
-    checklist = models.ForeignKey(Checklist, on_delete=models.CASCADE)
+    checklist = models.ForeignKey(Checklist, on_delete=models.CASCADE, related_name='items')
     text = models.CharField(max_length=100)
     completed = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.text
+        return self.text       
+    
+    
 
 
-class Comment(models.Model):
-    card = models.ForeignKey(Card, on_delete=models.CASCADE, related_name='comments')
-    text = models.TextField(max_length=300, null=False, blank=False)
-    author = models.CharField(max_length=50,verbose_name="Автор комментария")
-    created_at = models.DateTimeField(auto_now_add=True)
-    def __str__(self):
-        return self.text    
-
+    

@@ -14,14 +14,13 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+# trello_project/urls.py
+
 from django.contrib import admin
 from django.urls import path, include
-from project import views
-
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', views.index),
-    path('project/', include('project.urls')),
-
-] 
+    path('admin/', admin.site.urls),  # URL-маршруты для административной панели Django
+    path('accounts/', include('django.contrib.auth.urls')),  # URL-маршруты для авторизации и аутентификации
+    path('project/', include('project.urls')),  # Включаем URL-маршруты вашего приложения
+]

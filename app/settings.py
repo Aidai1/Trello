@@ -85,6 +85,7 @@ TEMPLATES = [
 
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
+    '/trello_app/app/static/'
 )
 
 WSGI_APPLICATION = 'app.wsgi.application'
