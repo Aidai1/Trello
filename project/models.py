@@ -44,7 +44,7 @@ class Board(models.Model):
     title = models.CharField(max_length=100)
     background = models.ImageField(upload_to='board_backgrounds/')
     participants = models.ManyToManyField(CustomUser, related_name='boards')
-    is_archived = models.BooleanField(default=False)
+    # is_archived = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title

@@ -14,7 +14,7 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-# trello_project/urls.py
+
 
 from django.contrib import admin
 from django.urls import path, include
@@ -22,5 +22,5 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),  # URL-маршруты для административной панели Django
     path('accounts/', include('django.contrib.auth.urls')),  # URL-маршруты для авторизации и аутентификации
-    path('project/', include('project.urls')),  # Включаем URL-маршруты вашего приложения
+    path('project/', include('project.urls')),  # Включаем URL-маршруты приложения
 ]

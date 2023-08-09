@@ -21,6 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+CSRF_TRUSTED_ORIGINS = ['https://80b4-185-117-149-103.ngrok-free.app', 'http://localhost:8000']
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -31,9 +32,17 @@ SECRET_KEY = 'django-insecure-sv8+!ghd2-t@(psai(&9u#xjq4c3wns*$+q64q_urn^4*^9x2$
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS =['localhost', '127.0.0.1', 'dcc7-185-117-148-176.ngrok-free.app']
+ALLOWED_HOSTS =['*']
 
-#AUTH_USER_MODEL = 'app.User'
+# AUTH_USER_MODEL = 'app.User'
+
+# EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS")
+# EMAIL_HOST = os.getenv("EMAIL_HOST")
+# EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
+# EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
+# EMAIL_PORT = os.getenv("EMAIL_PORT")
+
+
 
 # Application definition
 
@@ -84,10 +93,7 @@ TEMPLATES = [
 ]
 
 
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, "static"),
-    '/trello_app/app/static/'
-)
+
 
 WSGI_APPLICATION = 'app.wsgi.application'
 
