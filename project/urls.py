@@ -58,7 +58,7 @@ urlpatterns = [
     path('cards/<int:pk>/create/', CardCreateView.as_view(), name='create_card'),
     path('cards/delete/<int:pk>/', CardDeleteView.as_view(), name='delete_card'),
     path('cards/update/<int:pk>/', CardUpdateView.as_view(), name='update_card'),
-    path('cards/detail', CardDetailView.as_view(), name='card_detail')
+    path('cards/detail', CardDetailView.as_view(), name='detail_card')
 
 ]
 

@@ -12,8 +12,6 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 import os
 
 
-
-
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 from pathlib import Path
@@ -41,11 +39,6 @@ ALLOWED_HOSTS =['*']
 
 AUTH_USER_MODEL = 'user.User'
 
-# EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS")
-# EMAIL_HOST = os.getenv("EMAIL_HOST")
-# EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
-# EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
-# EMAIL_PORT = os.getenv("EMAIL_PORT")
 
 
 
