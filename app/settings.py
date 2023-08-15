@@ -11,9 +11,14 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 import os
 
+
+
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 from pathlib import Path
+
+
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -27,14 +32,14 @@ CSRF_TRUSTED_ORIGINS = ['https://80b4-185-117-149-103.ngrok-free.app', 'http://l
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-sv8+!ghd2-t@(psai(&9u#xjq4c3wns*$+q64q_urn^4*^9x2$'
+SECRET_KEY =  'django-insecure-sv8+!ghd2-t@psai&9uxjq4c3wns*$+q64q_urn^4*^9x2$'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS =['*']
 
-# AUTH_USER_MODEL = 'app.User'
+AUTH_USER_MODEL = 'user.User'
 
 # EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS")
 # EMAIL_HOST = os.getenv("EMAIL_HOST")
@@ -54,6 +59,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'project.apps.ProjectConfig',
+    'rest_framework',
+    'user',
+    
+    
    
 ]
 
@@ -109,6 +118,16 @@ DATABASES = {
 }
 
 
+
+
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
+    ]
+}
+
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
@@ -143,9 +162,21 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATICFILES_DIR = [
+    BASE_DIR / 'static'
+]
+
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+

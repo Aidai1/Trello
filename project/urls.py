@@ -1,86 +1,72 @@
 from django.urls import path
-from .views import (
-    activate,
-    AddToFavoritesView,
-    UserDetailView,
-    BoardCreateView,
-    BoardDeleteView,
-    BoardDetailView,
+from project.views.chek_list_view import (
+    ChecklistCreateView,
+    ChecklistUpdateView,
+    ChecklistDeleteView,
+    ChecklistItemCreateView,
+    ChecklistItemDeleteView,
+    ChecklistItemListView
+)
+from project.views.board_view import (
     BoardIndexView,
+    BoardCreateView,
+    BoardDetailView,
     BoardUpdateView,
-    CardCreateView,
-    CardDeleteView,
-    CardDetailView,
-    CardUpdateView,
+    BoardDeleteView, BoardJoinView
+)
+from project.views.column_view import (
     ColumnCreateView,
     ColumnDeleteView,
     ColumnDetailView,
     ColumnUpdateView,
-    ChecklistCreateView,
-    ChecklistDeleteView,
-    ChecklistUpdateView,
-    ChecklistItemListView,
-    ChecklistItemCreateView,
-    ChecklistItemDeleteView,
-    CommentCreateView,
-    CommentUpdateView,
-    CardLabelCreateView,
 )
 
-from django.contrib.auth.views import LoginView, LogoutView
+from project.views.card_view import (
+    CardCreateView,
+    CardDeleteView,
+    CardUpdateView,
+    CardDetailView
+)
 
-
-app_name = 'project/'
+from project.views.comment_view import CommentUpdateView, CommentDeleteView, CommentCreateView
+from project.views.label_view import CardLabelCreateView
 
 urlpatterns = [
-    path('activate/<str:uidb64>/<str:token>/', activate, name='activate'),
-    path('login/', LoginView.as_view(template_name='login.html'), name='login'),
-    path('logout/', LogoutView.as_view(), name='logout'),
-    # path('create/', signup, name='signup'),
-    path('<int:pk>/', UserDetailView.as_view(), name='detail_account'),
-    path('board/add_to_favorites/', AddToFavoritesView.as_view(), name='add_to_favorites'),
-    # path('recently_viewed_boards/', recently_viewed_boards, name='recently_viewed_boards'),
-    
+    path('', BoardIndexView.as_view(), name='index'),
+    path('board/<int:pk>/join/', BoardJoinView.as_view(), name='board_join'),
+    path('/<int:pk>/', CardDetailView.as_view(), name='detail_card'),
+    path('comment/<int:pk>/update', CommentUpdateView.as_view(), name='comment_update'),
+    path('comment/<int:pk>/delete', CommentDeleteView.as_view(), name='comment_delete'),
+    path('card/<int:pk>/comment/add/', CommentCreateView.as_view(), name='card_comment_add'),
+    path('card/<int:pk>/label/', CardLabelCreateView.as_view(), name='card_label_create'),
+    path('card/<int:pk>/checklist/create/', ChecklistCreateView.as_view(), name='checklist_create'),
+    path('checklist/<int:pk>/update/', ChecklistUpdateView.as_view(), name='checklist_update'),
+    path('checklist/<int:pk>/delete/', ChecklistDeleteView.as_view(), name='checklist_delete'),
+    path('checklist/<int:pk>/item/create/', ChecklistItemCreateView.as_view(), name='checklist_item_create'),
+    path('checklist/item/<int:pk>/delete/', ChecklistItemDeleteView.as_view(),
+         name='checklist_item_delete'),
+    path('checklist/<int:pk>/item/list/', ChecklistItemListView.as_view(),
+         name='checklist_item_list'),
+    path('board/create/', BoardCreateView.as_view(), name='create_board'),
+    path('board/<int:pk>/update/', BoardUpdateView.as_view(), name='update_board'),
+    path('board/<int:pk>/delete/', BoardDeleteView.as_view(), name='delete_board'),
+    path('board/<int:pk>/column/', BoardDetailView.as_view(), name='list_column'),
+    path('column/<int:pk>/create/', ColumnCreateView.as_view(), name='create_column'),
+    path('column/delete/<int:pk>/', ColumnDeleteView.as_view(), name='delete_column'),
+    path('column/update/<int:pk>/', ColumnUpdateView.as_view(), name='update_column'),
+    path('column/detail/<int:pk>/', ColumnDetailView.as_view(), name='detail_column_cards'),
+    path('cards/<int:pk>/create/', CardCreateView.as_view(), name='create_card'),
+    path('cards/delete/<int:pk>/', CardDeleteView.as_view(), name='delete_card'),
+    path('cards/update/<int:pk>/', CardUpdateView.as_view(), name='update_card'),
+    path('cards/detail', CardDetailView.as_view(), name='card_detail')
+
 ]
 
-urlpatterns = [
-    path('board/create/', BoardCreateView.as_view(), name='board-create'),
-    path('board/<int:pk>/delete/', BoardDeleteView.as_view(), name='board-delete'),
-    path('board/<int:pk>/', BoardDetailView.as_view(), name='board-detail'),
-    path('boards/', BoardIndexView.as_view(), name='board-index'),
-    path('board/<int:pk>/update/', BoardUpdateView.as_view(), name='board-update'),
 
-]
 
-urlpatterns = [
-    path('card/create/', CardCreateView.as_view(), name='card-create'),
-    path('card/<int:pk>/delete/', CardDeleteView.as_view(), name='card-delete'),
-    path('card/<int:pk>/', CardDetailView.as_view(), name='card-detail'),
-    path('card/<int:pk>/update/', CardUpdateView.as_view(), name='card-update'),
-]
 
-urlpatterns = [
-    path('column/create/', ColumnCreateView.as_view(), name='column-create'),
-    path('column/<int:pk>/delete/', ColumnDeleteView.as_view(), name='column-delete'),
-    path('column/<int:pk>/', ColumnDetailView.as_view(), name='column-detail'),
-    path('column/<int:pk>/update/', ColumnUpdateView.as_view(), name='column-update'),
-]
-    
 
-urlpatterns = [
-    path('checklist/create/', ChecklistCreateView.as_view(), name='checklist-create'),
-    path('checklist/<int:pk>/delete/', ChecklistDeleteView.as_view(), name='checklist-delete'),
-    path('checklist/<int:pk>/update/', ChecklistUpdateView.as_view(), name='checklist-update'),
-]   
 
-urlpatterns = [
-    path('checklist/<int:pk>/items/', ChecklistItemListView.as_view(), name='checklist-items'),
-    path('checklist-item/create/', ChecklistItemCreateView.as_view(), name='checklist-item-create'),
-    path('checklist-item/<int:pk>/delete/', ChecklistItemDeleteView.as_view(), name='checklist-item-delete'),
-    path('comment/create/', CommentCreateView.as_view(), name='comment-create'),
-    path('comment/<int:pk>/update/', CommentUpdateView.as_view(), name='comment-update'),
-    path('card-label/create/', CardLabelCreateView.as_view(), name='card-label-create'),
-]
 
     
 

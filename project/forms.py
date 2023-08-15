@@ -1,19 +1,18 @@
 from django import forms 
-from .models import CustomUser, Board, Card, Color, Comment, Column, Label, ChecklistItem, Checklist
+from .models import  Board, Card, Color, Comment, Column, Label, ChecklistItem, Checklist
 from django.contrib.auth.forms import UserCreationForm
+from django.forms import widgets
 
-
-class UserRegistrationForm(UserCreationForm):
-    class Meta:
-        model = CustomUser
-        fields = ['email', 'full_name', 'password1', 'password2']
             
 
 
 class BoardForm(forms.ModelForm):
     class Meta:
         model = Board
-        fields = ['title', 'background']
+        fields = ['title', 'background', 'users']
+        widgets = {
+            'users' : widgets.CheckboxSelectMultiple
+        }
         
         
 class CardForm(forms.ModelForm):
@@ -48,4 +47,9 @@ class CardLabelForm(forms.ModelForm):
         model = Label
         fields = ['name', 'color']
                                     
+
+class SimpleSearchForm(forms.Form):
+    search = forms.CharField(max_length=50, required=False, label='Найти',
+                             widget=widgets.TextInput(attrs={'class': "form-control w-25"}))
+
                         
