@@ -1,10 +1,11 @@
 from django.urls import path
-from .views import recently_viewed_boards, activate, signup, AddToFavoritesView
+from .views import recently_viewed_boards, activate, signup, AddToFavoritesView, MyLoginView
 from django.contrib.auth.views import LoginView, LogoutView
-from project.views import UserDetailView
+from .views import UserDetailView
 
 
 urlpatterns = [
+    path('templates/user/login/', MyLoginView.as_view(),name='login'),
     path('activate/<str:uidb64>/<str:token>/', activate, name='activate'),
     path('login/', LoginView.as_view(template_name='login.html'), name='login'),
     path('logout/', LogoutView.as_view(), name='logout'),

@@ -14,6 +14,27 @@ from django.template.loader import render_to_string
 from .tokens import account_activation_token
 from django.core.mail import EmailMessage
 from django.views import View
+from django.contrib.auth.views import LoginView
+from django.urls import reverse_lazy
+from django.contrib import messages
+
+
+
+def index(request):
+    return render(request, 'base.html')
+
+class MyLoginView(LoginView):
+    redirect_authenticated_user = True
+    
+    def get_success_url(self) -> str:
+        return reverse_lazy
+    
+    def form_invalid(self):
+        messages.error(self.request, 'Invalid username or password')
+        return self.render_to_response(self.get_context_data(form=form))
+
+def login(request):
+    return render(request, 'templates/user/login.html' )
 
 
 def signup(request):

@@ -23,7 +23,7 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/',admin.site.urls),  # URL-маршруты для административной панели Django
-    path('accounts/',include('django.contrib.auth.urls')),  # URL-маршруты для авторизации и аутентификации
-    path('project/',include('project.urls')),  # Включаем URL-маршруты приложения
+    path('project/',include('project.urls')), 
+    path('', include('user.urls'))
 ]
 
