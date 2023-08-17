@@ -37,7 +37,7 @@ DEBUG = True
 
 ALLOWED_HOSTS =['*']
 
-AUTH_USER_MODEL = 'user.User'
+AUTH_USER_MODEL = 'project.User'
 
 
 

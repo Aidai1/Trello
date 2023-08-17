@@ -1,6 +1,5 @@
 from django import forms 
 from .models import  Board, Card, Color, Comment, Column, Label, ChecklistItem, Checklist
-from django.contrib.auth.forms import UserCreationForm
 from django.forms import widgets
 
             

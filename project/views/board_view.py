@@ -31,10 +31,10 @@ class BoardIndexView(LoginRequiredMixin, ListView):
     template_name = 'board/index.html'
     context_object_name = 'boards'
 
-    # def get_queryset(self):
-    #     queryset = super().get_queryset()
-    #     queryset = queryset.filter(users=self.request.user)
-    #     return queryset
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        queryset = queryset.filter(users=self.request.user)
+        return queryset
 
     def get(self, request, *args, **kwargs):
         self.form = self.get_search_form()

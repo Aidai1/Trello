@@ -3,7 +3,7 @@ from django.views.generic import DetailView
 from django.contrib.auth.mixins import UserPassesTestMixin
 from project.models import Board
 from django.contrib.auth.decorators import login_required
-from .models import User
+from project.models import User
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from .forms import SignupForm
@@ -29,9 +29,9 @@ class MyLoginView(LoginView):
     def get_success_url(self) -> str:
         return reverse_lazy
     
-    def form_invalid(self):
-        messages.error(self.request, 'Invalid username or password')
-        return self.render_to_response(self.get_context_data(form=form))
+    # def form_invalid(self):
+    #     messages.error(self.request, 'Invalid username or password')
+    #     return self.render_to_response(self.get_context_data(form=form))
 
     def login(request):
         return render(request, 'login.html' )

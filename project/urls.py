@@ -43,10 +43,8 @@ urlpatterns = [
     path('checklist/<int:pk>/update/', ChecklistUpdateView.as_view(), name='checklist_update'),
     path('checklist/<int:pk>/delete/', ChecklistDeleteView.as_view(), name='checklist_delete'),
     path('checklist/<int:pk>/item/create/', ChecklistItemCreateView.as_view(), name='checklist_item_create'),
-    path('checklist/item/<int:pk>/delete/', ChecklistItemDeleteView.as_view(),
-         name='checklist_item_delete'),
-    path('checklist/<int:pk>/item/list/', ChecklistItemListView.as_view(),
-         name='checklist_item_list'),
+    path('checklist/item/<int:pk>/delete/', ChecklistItemDeleteView.as_view(), name='checklist_item_delete'),   
+    path('checklist/<int:pk>/item/list/', ChecklistItemListView.as_view(),  name='checklist_item_list'),  
     path('board/create/', BoardCreateView.as_view(), name='create_board'),
     path('board/<int:pk>/update/', BoardUpdateView.as_view(), name='update_board'),
     path('board/<int:pk>/delete/', BoardDeleteView.as_view(), name='delete_board'),
@@ -58,7 +56,7 @@ urlpatterns = [
     path('cards/<int:pk>/create/', CardCreateView.as_view(), name='create_card'),
     path('cards/delete/<int:pk>/', CardDeleteView.as_view(), name='delete_card'),
     path('cards/update/<int:pk>/', CardUpdateView.as_view(), name='update_card'),
-    path('cards/detail', CardDetailView.as_view(), name='detail_card')
+    path('cards/detail/<int:pk>/', CardDetailView.as_view(), name='detail_card')
 
 ]
 

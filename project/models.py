@@ -1,19 +1,40 @@
 
 from django.db import models
-from django.contrib.auth import get_user_model
 from django.urls import reverse
+from django.db import models
+from django.contrib.auth.models import  AbstractUser
 
+
+
+
+class User(AbstractUser):
+    email = models.EmailField(unique=True)
+    full_name = models.CharField(max_length=100)
+    is_active = models.BooleanField(default=False)
+    activation_token = models.CharField(max_length=100, blank=True)
+    recently_viewed_boards = models.ManyToManyField('project.Board', related_name='recently_viewed_by')
+    favorite_boards = models.ManyToManyField('project.Board', related_name='favorited_by')
+
+    def add_to_favorites(self, board):
+        self.favorite_boards.add(board)
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['username']
+
+    def __str__(self):
+        return self.email
+    
 
 
 class Board(models.Model):
     author = models.ForeignKey(
-        get_user_model(),
+        'project.User',
         on_delete=models.CASCADE,
         related_name='created_boards',
         verbose_name="Автор"
     )
     users = models.ManyToManyField(
-        get_user_model(),
+        'project.User',
         related_name='boards_users',
         verbose_name="Участники"
     )
@@ -54,7 +75,7 @@ class Card(models.Model):
 class Comment(models.Model):
     card = models.ForeignKey(Card, on_delete=models.CASCADE, related_name='comments')
     text = models.TextField(max_length=300, null=False, blank=False)
-    author = models.ForeignKey(get_user_model(), on_delete=models.SET_DEFAULT, default=1, related_name='comments',
+    author = models.ForeignKey(User, on_delete=models.SET_DEFAULT, default=1, related_name='comments',
                                verbose_name="Автор комментария")
     created_at = models.DateTimeField(auto_now_add=True)
     def __str__(self):
@@ -79,7 +100,7 @@ class Label(models.Model):
 class Checklist(models.Model):
     card = models.ForeignKey(Card, on_delete=models.CASCADE, related_name='checklists')
     title = models.CharField(max_length=100)
-    author = models.ForeignKey(get_user_model(), on_delete=models.SET_DEFAULT, default=1,
+    author = models.ForeignKey(User, on_delete=models.SET_DEFAULT, default=1,
                                related_name='checklist_author',
                                verbose_name="Автор чеклиста")
 
@@ -98,4 +119,5 @@ class ChecklistItem(models.Model):
     
 
 
-    
+
+        

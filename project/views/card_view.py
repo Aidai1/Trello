@@ -2,7 +2,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMix
 from django.shortcuts import get_object_or_404
 from django.views.generic import CreateView, UpdateView, DeleteView, DetailView
 from django.urls import reverse_lazy, reverse
-from project.models import Card, Column, Checklist, ChecklistItem
+from project.models import Card, Column, Checklist
 from project.forms import CardForm
 
 
