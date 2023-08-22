@@ -7,8 +7,12 @@ from django.db.models import Q
 from django.utils.http import urlencode
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.http import HttpResponseForbidden
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.views import View
+
+
+
+
 
 
 class BoardJoinView(LoginRequiredMixin, View):
@@ -62,6 +66,10 @@ class BoardIndexView(LoginRequiredMixin, ListView):
             context['query'] = urlencode({'search': self.search_value})
             context['search'] = self.search_value
         return context
+    
+    def index(request):
+        return render(request, 'base.html')
+    
 
 
 class BoardCreateView(LoginRequiredMixin, CreateView):
@@ -78,6 +86,9 @@ class BoardCreateView(LoginRequiredMixin, CreateView):
         board.users.set(form.cleaned_data['users'])
         return super().form_valid(form)
 
+    def create(request):
+        return render(request, 'board/create_boeard.html')
+
 class BoardDetailView(LoginRequiredMixin, DetailView):
     model = Board
     template_name = 'column/list_column.html'
@@ -87,6 +98,8 @@ class BoardDetailView(LoginRequiredMixin, DetailView):
         board = self.get_object()
         board.favorite_boards.add(request.user)
         return redirect('list_column', id=board.id)
+
+    
 
 
 class BoardUpdateView(PermissionRequiredMixin, UpdateView):
@@ -100,7 +113,8 @@ class BoardUpdateView(PermissionRequiredMixin, UpdateView):
     def has_permission(self):
         return super().has_permission() or self.get_object().author == self.request.user
 
-
+    def update(request):
+        return render(request, 'board/update_board.html')
 
 class BoardDeleteView(PermissionRequiredMixin, DeleteView):
     model = Board
@@ -111,3 +125,7 @@ class BoardDeleteView(PermissionRequiredMixin, DeleteView):
 
     def has_permission(self):
         return super().has_permission() or self.get_object().author == self.request.user
+
+
+    def delete(request):
+        return render(request, 'board/delete.html')
