@@ -6,19 +6,16 @@ from project.models import Column, Board
 from project.forms import ColumnForm
 
 
-class ColumnListView(PermissionRequiredMixin, ListView):
+class ColumnListView(ListView):
     template_name = 'column/list_column.html'
     context_object_name = 'columns'
     model = Column
-    permission_required = 'project.view_column'
-
-    def has_permission(self):
-        board_ids = self.model.objects.values_list('board_id', flat=True)
-        participant_boards = Board.objects.filter(users=self.request.user, id__in=board_ids)
-        return participant_boards.exists()
+    
 
 
-class ColumnCreateView(LoginRequiredMixin, CreateView):
+
+
+class ColumnCreateView(CreateView):
     model = Column
     template_name = "column/create_column.html"
     context_object_name = "colomns"
@@ -33,33 +30,23 @@ class ColumnCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class ColumnUpdateView(PermissionRequiredMixin, UpdateView):
+class ColumnUpdateView(UpdateView):
     model = Column
     success_url = reverse_lazy('index')
     context_object_name = "columns"
     permission_required = 'project.change_column'
 
-    def has_permission(self):
-        if self.request.user == self.get_object().board.author:
-            return True
-        return False
 
 
-
-class ColumnDeleteView(PermissionRequiredMixin, DeleteView):
+class ColumnDeleteView(DeleteView):
     model = Column
     template_name = "column/delete_column.html"
     success_url = reverse_lazy('detail_column')
     context_object_name = "columns"
     permission_required = 'project.delete_column'
 
-    def has_permission(self):
-        if self.request.user == self.get_object().board.author:
-            return True
-        return False
-
-
-class ColumnDetailView(PermissionRequiredMixin, DetailView):
+    
+class ColumnDetailView(DetailView):
     model = Column
     context_object_name = "columns"
     template_name = "column/detail_column_cards.html"

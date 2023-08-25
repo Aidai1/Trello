@@ -1,5 +1,5 @@
 
-from django.db import models
+from django.contrib.auth import get_user_model
 from django.urls import reverse
 from django.db import models
 from django.contrib.auth.models import  AbstractUser
@@ -28,13 +28,13 @@ class User(AbstractUser):
 
 class Board(models.Model):
     author = models.ForeignKey(
-        'project.User',
+        get_user_model(),
         on_delete=models.CASCADE,
         related_name='created_boards',
         verbose_name="Автор"
     )
     users = models.ManyToManyField(
-        'project.User',
+        get_user_model(),
         related_name='boards_users',
         verbose_name="Участники"
     )

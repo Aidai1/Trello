@@ -23,19 +23,19 @@ class SignupForm(UserCreationForm):
             raise forms.ValidationError('Passwords do not match.')
         return password2
 
-class RegistrationForm(forms.Form):
-    email = forms.EmailField(label='Почта')
-    password = forms.CharField(label='Пароль', widget=forms.PasswordInput)
-    full_name = forms.CharField(label='ФИО')
+# class RegistrationForm(forms.Form):
+#     email = forms.EmailField(label='Почта')
+#     password = forms.CharField(label='Пароль', widget=forms.PasswordInput)
+#     full_name = forms.CharField(label='ФИО')
 
-    def clean_email(self):
-        email = self.cleaned_data['email']
-        return email
+#     def clean_email(self):
+#         email = self.cleaned_data['email']
+#         return email
 
-    def clean_password(self):
-        password = self.cleaned_data['password']
-        return password
+#     def clean_password(self):
+#         password = self.cleaned_data['password']
+#         return password
 
-    def clean_full_name(self):
-        full_name = self.cleaned_data['full_name']
-        return full_name
+#     def clean_full_name(self):
+#         full_name = self.cleaned_data['full_name']
+#         return full_name

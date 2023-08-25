@@ -12,7 +12,8 @@ from project.views.board_view import (
     BoardCreateView,
     BoardDetailView,
     BoardUpdateView,
-    BoardDeleteView, BoardJoinView
+    BoardDeleteView, 
+    
 )
 from project.views.column_view import (
     ColumnCreateView,
@@ -31,9 +32,10 @@ from project.views.card_view import (
 from project.views.comment_view import CommentUpdateView, CommentDeleteView, CommentCreateView
 from project.views.label_view import CardLabelCreateView
 
+app_name= 'project/'
+
 urlpatterns = [
     path('', BoardIndexView.as_view(), name='index'),
-    path('board/<int:pk>/join/', BoardJoinView.as_view(), name='board_join'),
     path('/<int:pk>/', CardDetailView.as_view(), name='detail_card'),
     path('comment/<int:pk>/update', CommentUpdateView.as_view(), name='comment_update'),
     path('comment/<int:pk>/delete', CommentDeleteView.as_view(), name='comment_delete'),
@@ -45,7 +47,7 @@ urlpatterns = [
     path('checklist/<int:pk>/item/create/', ChecklistItemCreateView.as_view(), name='checklist_item_create'),
     path('checklist/item/<int:pk>/delete/', ChecklistItemDeleteView.as_view(), name='checklist_item_delete'),   
     path('checklist/<int:pk>/item/list/', ChecklistItemListView.as_view(),  name='checklist_item_list'),  
-    path('board/create/', BoardCreateView.as_view(), name='create_board'),
+    path('board/create_board/', BoardCreateView.as_view(), name='create_board'),
     path('board/<int:pk>/update/', BoardUpdateView.as_view(), name='update_board'),
     path('board/<int:pk>/delete/', BoardDeleteView.as_view(), name='delete_board'),
     path('board/<int:pk>/column/', BoardDetailView.as_view(), name='list_column'),
@@ -56,7 +58,7 @@ urlpatterns = [
     path('cards/<int:pk>/create/', CardCreateView.as_view(), name='create_card'),
     path('cards/delete/<int:pk>/', CardDeleteView.as_view(), name='delete_card'),
     path('cards/update/<int:pk>/', CardUpdateView.as_view(), name='update_card'),
-    path('cards/detail/<int:pk>/', CardDetailView.as_view(), name='detail_card')
+    path('cards/detail/<int:pk>', CardDetailView.as_view(), name='detail_card')
 
 ]
 

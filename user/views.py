@@ -20,9 +20,6 @@ from django.contrib import messages
 
 
 
-def index(request):
-    return render(request, 'base.html')
-
 class MyLoginView(LoginView):
     redirect_authenticated_user = True
     
@@ -62,7 +59,7 @@ def signup(request):
             return HttpResponse('Please confirm your email address to complete the registration')
     else:
         form = SignupForm()
-    return render(request, 'signup.html', {'form': form})
+    return render(request, 'signup.html')
 
 
 def activate(request, uidb64, token):

@@ -6,7 +6,7 @@ from project.forms import CommentForm
 from project.models import Comment, Card
 
 
-class CommentCreateView(LoginRequiredMixin, CreateView):
+class CommentCreateView(CreateView):
     template_name = 'comment/create_comment.html'
     model = Comment
     form_class = CommentForm

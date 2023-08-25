@@ -21,7 +21,7 @@ class ChecklistCreateView(CreateView):
         return super().form_valid(form)
 
 
-class ChecklistUpdateView(PermissionRequiredMixin, UpdateView):
+class ChecklistUpdateView(UpdateView):
     model = Checklist
     template_name = 'checklist/checklist_update.html'
     form_class = ChecklistForm
@@ -30,11 +30,10 @@ class ChecklistUpdateView(PermissionRequiredMixin, UpdateView):
     def get_success_url(self):
         return reverse('detail_card', kwargs={'pk': self.object.card.pk})
 
-    def has_permission(self):
-        return self.request.user.has_perm('project.change_checklist') or self.get_object().author == self.request.user
+    
 
 
-class ChecklistDeleteView(UserPassesTestMixin, DeleteView):
+class ChecklistDeleteView(DeleteView):
     model = Checklist
 
     def get(self, request, *args, **kwargs):
@@ -62,7 +61,7 @@ class ChecklistItemCreateView(CreateView):
 
 
 
-class ChecklistItemDeleteView(UserPassesTestMixin, DeleteView):
+class ChecklistItemDeleteView(DeleteView):
     model = ChecklistItem
 
     def get(self, request, *args, **kwargs):
